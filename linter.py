@@ -19,8 +19,8 @@ def get_all_files():
 def code_formatter(fileName):
     with open(fileName, "r") as fobj:
         content = fobj.read()
-        content = re.sub("[{]","\n\t{",content)
-        content = re.sub("[}]","\t}\n",content)
+        content = re.sub("[{]","\n    {",content)
+        content = re.sub("[}]","    }\n",content)
 
         content = [x for x in content.splitlines() if x.strip() != ""]
         content = "\n".join(content)
