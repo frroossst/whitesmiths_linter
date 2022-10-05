@@ -1,0 +1,3 @@
+match indented funcs
+restrict each function to 40 lines
+McGabe complexity checker

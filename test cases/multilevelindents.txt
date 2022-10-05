@@ -1,0 +1,25 @@
+public class BasicStaff 
+	{
+    public static void main(String[] args)
+	{
+    System.out.println("Hello World!");`
+    }
+    public static void dain(String[] args)
+{
+System.out.print()
+}
+    public static void blain(String[] args)
+        	{
+            System.out.print()
+            another 
+                	{
+                    levelofblock
+ {
+ yugioh 														
+ }
+	{
+    oikebon 														
+    }
+		}
+		}
+		}
