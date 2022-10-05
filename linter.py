@@ -10,6 +10,7 @@ def main():
         if i not in except_src:
             try:
                 code_formatter(i)
+                print(f"[LINTED] {i}")
             except IsADirectoryError:
                 print(f"[SKIPPED] {i} is a directory")
 
@@ -22,7 +23,7 @@ def code_formatter(fileName):
         content = re.sub("[{]","\n    {",content)
         content = re.sub("[}]","    }\n",content)
 
-        content = [x for x in content.splitlines() if x.strip() != ""]
+        content = [x for x in content.splitlines() if "\n" not in x and x.strip() != ""]
         content = "\n".join(content)
 
     content = fix_indent_levels(content)

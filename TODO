@@ -1,3 +1,7 @@
-match indented funcs
-restrict each function to 40 lines
-McGabe complexity checker
+- preserve new lines
+
+- match indented funcs
+
+- restrict each function to 40 lines
+
+- McGabe complexity checker
