@@ -5,7 +5,7 @@ import os
 
 def main():
     files = get_all_files()
-    except_src = ["linter.py"]
+    except_src = ["linter.py","README.md",".gitignore","TODO"]
     for i in files:
         if i not in except_src:
             try:
@@ -17,16 +17,20 @@ def main():
 def get_all_files():
      return os.listdir(os.getcwd())
 
-def code_formatter(fileName):
+def code_formatter(fileName, passes=3):
     with open(fileName, "r") as fobj:
         content = fobj.read()
         content = re.sub("[{]","\n    {",content)
         content = re.sub("[}]","    }\n",content)
 
-        content = [x for x in content.splitlines() if "\n" not in x and x.strip() != ""]
+        content = [x for x in content.splitlines()] # if "\n" not in x and x.strip() != ""]
         content = "\n".join(content)
 
-    content = fix_indent_levels(content)
+    count = 0
+    while count < passes:
+        content = fix_indent_levels(content)
+        count += 1
+#    content = remove_bracket_newlines(content)
 
     with open(fileName, "w") as fobj:
         fobj.write(content)
@@ -62,7 +66,6 @@ def fix_indent_levels(content):
 
     return matched_indents
 
-
 def get_indent_level(line):
     count = 0
     for i in line:
@@ -85,6 +88,8 @@ def match_indent_levels(tomatch, current, str):
         return " " * tomatch + str
     else: 
         return str
+
+
 
 def check_function_complexity(fileName):
      pass

@@ -1,4 +1,6 @@
-- preserve new lines
+- filter bad bracket spacing and negative indents
+
+- linter_settings.json
 
 - match indented funcs
 
