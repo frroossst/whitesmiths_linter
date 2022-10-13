@@ -1,0 +1,10 @@
+{
+    "skip" : 
+        [
+            "linter.py",
+            "README.md",
+            ".gitignore",
+            "TODO",
+            "LICENSE"
+        ]
+}
