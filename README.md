@@ -1,3 +1,5 @@
+![whitesmiths linter tests status](https://github.com/frroossst/whitesmiths_linter/actions/workflows/ci.yml/badge.svg)
+
 After picking up the whitemsiths indentation style from my first internship, I simply can't go back to any other style, the whitesmiths style makes blocks of code clear visually, This style of indent fits in perfectly with the Gestalt Principles of vision.
 And that is the life of a programmer, come across something, pick that has a hill to die on, write tools to automate said task, and of course convert everyone else to your way of programming.
 
