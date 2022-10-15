@@ -5,6 +5,8 @@
             "README.md",
             ".gitignore",
             "TODO",
-            "LICENSE"
+            "LICENSE",
+            "tests.py",
+            "whitesmiths_linter_settings.json"
         ]
 }

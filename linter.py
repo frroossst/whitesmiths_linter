@@ -100,16 +100,19 @@ def manage_indents(content):
     lines = content.split("\n")
     indented_lines = []
 
-    upper_bound = len(lines) - 1
+    curr_indent_level = None
+
+    upper_bound = len(lines) - 1 # ! check for the next line
     prev_line = None
     
     for x, i in enumerate(lines):
         if x == 0:
             indented_lines.append(i)
+            curr_indent_level = get_indent_level(i)
         else:
             prev_line = lines[x - 1]
             prev_indent = get_indent_level(prev_line)
-            indented_lines.append(get_indent_whitespace(prev_indent) + i)
+            indented_lines.append(get_indent_whitespace(prev_indent) + i.strip())
 
     return "\n".join(indented_lines)
 
