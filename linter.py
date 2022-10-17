@@ -40,7 +40,11 @@ def lint(fileName) -> None:
 
     tokens = tokeniser(content)
     bracket_aligned = manage_brackets(tokens)
+    print("*"*10,"After Brackets Aligned")
+    print(bracket_aligned)
     indent_aligned = manage_indents(bracket_aligned)
+    print("*"*10,"After Indent Management")
+    print(indent_aligned)
 
     with open(fileName + "_output", "w") as fobj: # temp output as I do not trust this enough to manipulate source code
         content = fobj.write(indent_aligned)
@@ -100,28 +104,70 @@ def manage_indents(content):
     lines = content.split("\n")
     indented_lines = []
 
-    curr_indent_level = None
-
-    upper_bound = len(lines) - 1 # ! check for the next line
     prev_line = None
     
     for x, i in enumerate(lines):
         if x == 0:
             indented_lines.append(i)
-            curr_indent_level = get_indent_level(i)
         else:
-            prev_line = lines[x - 1]
+            curr_line = i
+            prev_line = lines[-1]
             prev_indent = get_indent_level(prev_line)
-            indented_lines.append(get_indent_whitespace(prev_indent) + i.strip())
+
+            # prev = code; curr = code -> same as prev
+            if (is_a_code_line(prev_line)) and (is_a_code_line(curr_line)):
+                indented_lines.append(get_indent_whitespace(prev_indent) + curr_line.lstrip())
+
+            # prev = {; and curr = code -> same as prev
+            elif (is_an_opening_line(prev_line)) and (is_a_code_line(curr_line)):
+                indented_lines.append(get_indent_whitespace(prev_indent) + curr_line.lstrip())
+
+            # prev = code; curr = } -> same as prev
+            elif (is_a_code_line(prev_line)) and (is_a_closing_line(curr_line)):
+                indented_lines.append(get_indent_whitespace(prev_indent) + curr_line.lstrip())
+
+            # prev = code; curr = { -> +1 level
+            elif (is_a_code_line(prev_line)) and (is_an_opening_line(curr_line)):
+                indented_lines.append(get_indent_whitespace(prev_indent + 4) + curr_line.lstrip())
+
+            # prev = }; curr = code -> -1 level
+            elif (is_a_closing_line(prev_line) and is_a_code_line(curr_line)):
+                indented_lines.append(get_indent_whitespace(prev_indent - 4) + curr_line.lstrip())
+
+            else:
+                indented_lines.append(curr_line)
 
     return "\n".join(indented_lines)
 
+'''
+            if (prev_line.strip() == open_brace) and (is_a_code_line(i)):
+                indented_lines.append(get_indent_whitespace(prev_indent + 4) + i.lstrip())
+
+            elif (prev_line.strip() == close_brace) and (is_a_code_line(i)):
+                indented_lines.append(get_indent_whitespace(prev_indent - 4) + i.lstrip())
+
+            elif (is_a_code_line(prev_line)) and (i.strip() == open_brace):
+                indented_lines.append(get_indent_whitespace(prev_indent + 4) + i.lstrip())
+
+            elif (is_a_code_line(prev_line)) and (i.strip() == close_brace):
+                indented_lines.append(get_indent_whitespace(prev_indent) + i.lstrip())
+
+            elif (prev_line.strip() == close_brace) and (i.strip() == close_brace):
+                indented_lines.append(get_indent_whitespace(prev_indent - 4) + i.lstrip())
+
+            else:
+                indented_lines.append(get_indent_whitespace(prev_indent) + i.lstrip())
+'''
+
+        #indented_lines.append("\n")
+
+
 
 def get_indent_level(line):
-    count = 0
+    count = 1 # because natural number counting
 
     if line is None:
-        return count
+        return 0
 
     for i in line:
         if i.isalpha() or i == "\n":
@@ -130,18 +176,32 @@ def get_indent_level(line):
             if i == " ":
                 count += 1
             elif i == "\t":
-                count += 4
+                count += 3
 
+    if count == 1: # due to how the loop works with special characters
+        return 0
     if count % 2 == 0:
         return count
     else:
         return count + 1 
 
 
-def get_indent_whitespace(indent_level):
+def get_indent_whitespace(indent_level, useTabs=False):
     if indent_level % 2 != 0:
         raise  Exception("InvalidIndentError")
+    if indent_level < 0:
+        return ""
     return " " * indent_level
+
+def is_a_code_line(line):
+    return (line.strip() != open_brace) and (line.strip() != close_brace)
+
+def is_an_opening_line(line):
+    return line.strip() == open_brace
+
+def is_a_closing_line(line):
+    return line.strip() == close_brace
+
 
 
 

@@ -1,7 +1,6 @@
 from linter import *
 
 
-
 assert get_indent_level(None) == 0
 
 assert get_indent_level("") == 0
