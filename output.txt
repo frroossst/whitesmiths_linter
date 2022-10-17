@@ -70,6 +70,270 @@ void foo()
         }
 }
 
+[DEBUG]
+prev line : 
+curr line : #include <stdint.h>
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : #include <stdio.h>
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : 
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : 
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : 
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : void bmain()
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :    {
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :    printf("whitesmiths indent example");
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :    if (true)
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :       {
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :       bool test = false;
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :       }
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :    }
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : 
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : int main() 
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : {
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :    char str[5][50], temp[50];
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :    printf("Enter 5 words: ");
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : 
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :    // Getting strings input
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :    for (int i = 0; i < 5; ++i) 
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : {
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :       fgets(str[i], sizeof(str[i]), stdin);
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : }
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : 
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :    // storing strings in the lexicographical order
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :    for (int i = 0; i < 5; ++i) 
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : {
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :       for (int j = i + 1; j < 5; ++j) 
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : {
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :          // swapping strings if they are not in the lexicographical order
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :          if (strcmp(str[i], str[j]) > 0) 
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : {}
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :             strcpy(temp, str[i]);
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :             strcpy(str[i], str[j]);
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :             strcpy(str[j], temp);
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :          }
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :       }
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : 
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :    for (int i = 0; i < 5; ++i) 
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : {
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :       fputs(str[i], stdout);
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : }
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : 
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :    return 0;
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : 
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : }
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : 
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : 
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : 
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : void foo() 
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : {
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :     if (true) 
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : {
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :         foo();
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :    }
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :    else if (true) 
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : {}
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :    else 
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : {
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :         bar();
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :         foo();
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :         foobar();
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line :         }
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : }
+prev indent : 0
+[DEBUG]
+prev line : 
+curr line : 
+prev indent : 0
 ********** After Indent Management
 #include <stdbool.h>
 #include <stdint.h>

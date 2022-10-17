@@ -1,16 +1,17 @@
 import json
 import os
 import re
+from xmlrpc.client import boolean
 
 
 
 open_brace = "{"
 close_brace = "}"
 
-def get_all_files():
+def get_all_files() -> list:
     return os.listdir(os.getcwd())
 
-def main():
+def main() -> None:
     files = get_all_files()
     except_src = get_files_to_skip()
     for i in files:
@@ -29,12 +30,12 @@ def main():
     content = re.sub("[}]","\n    }\n",content)
 '''
 
-def get_files_to_skip():
+def get_files_to_skip() -> list:
     with open("whitesmiths_linter_settings.json", "r") as fobj:
         settings = json.load(fobj)
         return settings["skip"]
 
-def lint(fileName) -> None:
+def lint(fileName: str) -> None:
     with open(fileName, "r") as fobj:
         content = fobj.read()
 
@@ -52,12 +53,12 @@ def lint(fileName) -> None:
     return None
 
 
-def tokeniser(content) -> list:
+def tokeniser(content: str) -> list:
     lines = content.split("\n")
     return lines
 
 
-def manage_brackets(tokens):
+def manage_brackets(tokens: str) -> str:
     bracket_aligned = []
 
     for idx, i in enumerate(tokens):
@@ -96,7 +97,7 @@ def manage_brackets(tokens):
     return "".join(bracket_aligned)
 
 
-def manage_indents(content):
+def manage_indents(content: str) -> str:
     # minimum indent level allowed is 1 i.e. 4 spaces or 1 tab
     # content = re.sub("{", "    {", content)
     # content = re.sub("}", "    }", content)
@@ -113,6 +114,11 @@ def manage_indents(content):
             curr_line = i
             prev_line = lines[-1]
             prev_indent = get_indent_level(prev_line)
+
+            print("[DEBUG]")
+            print(f"prev line : {prev_line}")
+            print(f"curr line : {curr_line}")
+            print(f"prev indent : {prev_indent}")
 
             # prev = code; curr = code -> same as prev
             if (is_a_code_line(prev_line)) and (is_a_code_line(curr_line)):
@@ -163,7 +169,7 @@ def manage_indents(content):
 
 
 
-def get_indent_level(line):
+def get_indent_level(line: str) -> int:
     count = 1 # because natural number counting
 
     if line is None:
@@ -186,7 +192,7 @@ def get_indent_level(line):
         return count + 1 
 
 
-def get_indent_whitespace(indent_level, useTabs=False):
+def get_indent_whitespace(indent_level: int, useTabs=False) -> str:
     if indent_level % 2 != 0:
         raise  Exception("InvalidIndentError")
     if indent_level < 0:
