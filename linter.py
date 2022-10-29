@@ -1,15 +1,16 @@
 import json
 import os
 import re
-from xmlrpc.client import boolean
 
 
 
 open_brace = "{"
 close_brace = "}"
 
+
 def get_all_files() -> list:
     return os.listdir(os.getcwd())
+
 
 def main() -> None:
     files = get_all_files()
@@ -34,6 +35,7 @@ def get_files_to_skip() -> list:
     with open("whitesmiths_linter_settings.json", "r") as fobj:
         settings = json.load(fobj)
         return settings["skip"]
+
 
 def lint(fileName: str) -> None:
     with open(fileName, "r") as fobj:
@@ -145,38 +147,20 @@ def manage_indents(content: str) -> str:
 
     return "\n".join(indented_lines)
 
-'''
-            if (prev_line.strip() == open_brace) and (is_a_code_line(i)):
-                indented_lines.append(get_indent_whitespace(prev_indent + 4) + i.lstrip())
-
-            elif (prev_line.strip() == close_brace) and (is_a_code_line(i)):
-                indented_lines.append(get_indent_whitespace(prev_indent - 4) + i.lstrip())
-
-            elif (is_a_code_line(prev_line)) and (i.strip() == open_brace):
-                indented_lines.append(get_indent_whitespace(prev_indent + 4) + i.lstrip())
-
-            elif (is_a_code_line(prev_line)) and (i.strip() == close_brace):
-                indented_lines.append(get_indent_whitespace(prev_indent) + i.lstrip())
-
-            elif (prev_line.strip() == close_brace) and (i.strip() == close_brace):
-                indented_lines.append(get_indent_whitespace(prev_indent - 4) + i.lstrip())
-
-            else:
-                indented_lines.append(get_indent_whitespace(prev_indent) + i.lstrip())
-'''
-
-        #indented_lines.append("\n")
-
-
 
 def get_indent_level(line: str) -> int:
+    
+    ascii_chars = [
+        "!", "\"", "#", "$", "%", "&", "'", "(", ")", "*", "+", "-", "`", "/", ":", 
+        ";", "<", "=", ">", "?", "@", "[", "\\", "]", "^", "_", "|", "~"]
+
     count = 1 # because natural number counting
 
     if line is None:
         return 0
 
     for i in line:
-        if i.isalpha() or i == "\n":
+        if i.isalpha() or (i == "\n") or (i in ascii_chars):
             break
         if i.isspace():
             if i == " ":
@@ -207,7 +191,6 @@ def is_an_opening_line(line):
 
 def is_a_closing_line(line):
     return line.strip() == close_brace
-
 
 
 
