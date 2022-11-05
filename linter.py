@@ -1,6 +1,5 @@
 import json
 import os
-import re
 
 
 
@@ -26,10 +25,6 @@ def main() -> None:
         else:
             print(f"[SKIPPED] {i} found in exception list")
 
-'''
-    content = re.sub("[{]","\n    {\n",content)
-    content = re.sub("[}]","\n    }\n",content)
-'''
 
 def get_files_to_skip() -> list:
     with open("whitesmiths_linter_settings.json", "r") as fobj:
@@ -114,13 +109,15 @@ def manage_indents(content: str) -> str:
             indented_lines.append(i)
         else:
             curr_line = i
-            prev_line = lines[-1]
+            prev_line = indented_lines[-1]
             prev_indent = get_indent_level(prev_line)
 
-            print("[DEBUG]")
-            print(f"prev line : {prev_line}")
-            print(f"curr line : {curr_line}")
-            print(f"prev indent : {prev_indent}")
+            print(x,i)
+            print(f"prev line: {prev_line}")
+            print(f"prev indent: {prev_indent}")
+            print(f"curr line: {curr_line}")
+            print(f"curr indent: {get_indent_level(curr_line)}")
+            print()
 
             # prev = code; curr = code -> same as prev
             if (is_a_code_line(prev_line)) and (is_a_code_line(curr_line)):
@@ -170,11 +167,14 @@ def get_indent_level(line: str) -> int:
 
     if count == 1: # due to how the loop works with special characters
         return 0
-    if count % 2 == 0:
+    if count % 4 == 0:
         return count
     else:
-        return count + 1 
+        return get_nearest_multiple_of(count, 4)
 
+
+def get_nearest_multiple_of(x: int, of: int) -> int:
+    return ((x + (of - 1)) & (-of))
 
 def get_indent_whitespace(indent_level: int, useTabs=False) -> str:
     if indent_level % 2 != 0:
