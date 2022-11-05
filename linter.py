@@ -172,7 +172,7 @@ def get_indent_level(line: str) -> int:
             if i == " ":
                 count += 1
             elif i == "\t":
-                count += 3
+                count += 4
 
     if count == 1: # due to how the loop works with special characters
         return 0
