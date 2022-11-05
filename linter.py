@@ -10,7 +10,6 @@ close_brace = "}"
 def get_all_files() -> list:
     return os.listdir(os.getcwd())
 
-
 def main() -> None:
     files = get_all_files()
     except_src = get_files_to_skip()
@@ -112,32 +111,42 @@ def manage_indents(content: str) -> str:
             prev_line = indented_lines[-1]
             prev_indent = get_indent_level(prev_line)
 
-            print(x,i)
-            print(f"prev line: {prev_line}")
-            print(f"prev indent: {prev_indent}")
-            print(f"curr line: {curr_line}")
-            print(f"curr indent: {get_indent_level(curr_line)}")
+            print(f"{x} |",end="")
+            print(f"prev line: {prev_line} |", end="")
+            print(f"prev indent: {prev_indent} |", end="")
+            print(f"curr line: {curr_line} |", end="")
+            print(f"curr indent: {prev_indent} |", end="")
             print()
 
             # prev = code; curr = code -> same as prev
             if (is_a_code_line(prev_line)) and (is_a_code_line(curr_line)):
-                indented_lines.append(get_indent_whitespace(prev_indent) + curr_line.lstrip())
+                wsp = get_indent_whitespace(prev_indent)
+                cus = curr_line.lstrip()
+                indented_lines.append(wsp + cus)
 
             # prev = {; and curr = code -> same as prev
             elif (is_an_opening_line(prev_line)) and (is_a_code_line(curr_line)):
-                indented_lines.append(get_indent_whitespace(prev_indent) + curr_line.lstrip())
+                wsp = get_indent_whitespace(prev_indent)
+                cus = curr_line.lstrip()
+                indented_lines.append(wsp + cus)
 
             # prev = code; curr = } -> same as prev
             elif (is_a_code_line(prev_line)) and (is_a_closing_line(curr_line)):
-                indented_lines.append(get_indent_whitespace(prev_indent) + curr_line.lstrip())
+                wsp = get_indent_whitespace(prev_indent)
+                cus = curr_line.lstrip()
+                indented_lines.append(wsp + cus)
 
             # prev = code; curr = { -> +1 level
             elif (is_a_code_line(prev_line)) and (is_an_opening_line(curr_line)):
-                indented_lines.append(get_indent_whitespace(prev_indent + 4) + curr_line.lstrip())
+                wsp = get_indent_whitespace(prev_indent + 4)
+                cus = curr_line.lstrip()
+                indented_lines.append(wsp + cus)
 
             # prev = }; curr = code -> -1 level
             elif (is_a_closing_line(prev_line) and is_a_code_line(curr_line)):
-                indented_lines.append(get_indent_whitespace(prev_indent - 4) + curr_line.lstrip())
+                wsp = get_indent_whitespace(prev_indent - 4)
+                cus = curr_line.lstrip()
+                indented_lines.append(wsp + cus)
 
             else:
                 indented_lines.append(curr_line)
@@ -151,7 +160,7 @@ def get_indent_level(line: str) -> int:
         "!", "\"", "#", "$", "%", "&", "'", "(", ")", "*", "+", "-", "`", "/", ":", 
         ";", "<", "=", ">", "?", "@", "[", "\\", "]", "^", "_", "|", "~"]
 
-    count = 1 # because natural number counting
+    count = 0 # because natural number counting
 
     if line is None:
         return 0
