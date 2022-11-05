@@ -10,6 +10,23 @@ close_brace = "}"
 def get_all_files() -> list:
     return os.listdir(os.getcwd())
 
+def get_files_to_skip() -> list:
+    with open("whitesmiths_linter_settings.json", "r") as fobj:
+        settings = json.load(fobj)
+        return settings["skip"]
+
+def get_source_overwrite_permission() -> bool:
+    with open("whitesmiths_linter_settings.json", "r") as fobj:
+        settings = json.load(fobj)
+        return settings["modify_source"]
+
+def get_indent_spaces_length() -> int:
+    with open("whitesmiths_linter_settings.json", "r") as fobj:
+        settings = json.load(fobj)
+        return int(settings["indent_space_length"])
+
+
+
 def main() -> None:
     files = get_all_files()
     except_src = get_files_to_skip()
@@ -18,18 +35,10 @@ def main() -> None:
             try:
                 lint(i)
                 print(f"[LINTED] {i}")
-                break # ! only for testing
             except IsADirectoryError:
                 print(f"[SKIPPED] {i} is a directory")
         else:
             print(f"[SKIPPED] {i} found in exception list")
-
-
-def get_files_to_skip() -> list:
-    with open("whitesmiths_linter_settings.json", "r") as fobj:
-        settings = json.load(fobj)
-        return settings["skip"]
-
 
 def lint(fileName: str) -> None:
     with open(fileName, "r") as fobj:
@@ -37,22 +46,20 @@ def lint(fileName: str) -> None:
 
     tokens = tokeniser(content)
     bracket_aligned = manage_brackets(tokens)
-    print("*"*10,"After Brackets Aligned")
-    print(bracket_aligned)
     indent_aligned = manage_indents(bracket_aligned)
-    print("*"*10,"After Indent Management")
-    print(indent_aligned)
 
-    with open(fileName + "_output", "w") as fobj: # temp output as I do not trust this enough to manipulate source code
-        content = fobj.write(indent_aligned)
+    if get_source_overwrite_permission():
+        with open(fileName, "w") as fobj:
+            fobj.write(indent_aligned)
+    else:
+        with open(fileName + "_output", "w") as fobj:
+            fobj.write(indent_aligned)
 
     return None
-
 
 def tokeniser(content: str) -> list:
     lines = content.split("\n")
     return lines
-
 
 def manage_brackets(tokens: str) -> str:
     bracket_aligned = []
@@ -92,11 +99,9 @@ def manage_brackets(tokens: str) -> str:
 
     return "".join(bracket_aligned)
 
-
 def manage_indents(content: str) -> str:
     # minimum indent level allowed is 1 i.e. 4 spaces or 1 tab
-    # content = re.sub("{", "    {", content)
-    # content = re.sub("}", "    }", content)
+    indent_spaces_length = get_indent_spaces_length()
 
     lines = content.split("\n")
     indented_lines = []
@@ -111,47 +116,39 @@ def manage_indents(content: str) -> str:
             prev_line = indented_lines[-1]
             prev_indent = get_indent_level(prev_line)
 
-            print(f"{x} |",end="")
-            print(f"prev line: {prev_line} |", end="")
-            print(f"prev indent: {prev_indent} |", end="")
-            print(f"curr line: {curr_line} |", end="")
-            print(f"curr indent: {prev_indent} |", end="")
-            print()
-
             # prev = code; curr = code -> same as prev
             if (is_a_code_line(prev_line)) and (is_a_code_line(curr_line)):
-                wsp = get_indent_whitespace(prev_indent)
-                cus = curr_line.lstrip()
-                indented_lines.append(wsp + cus)
+                indented_lines.append(get_indent_whitespace(prev_indent) + curr_line.lstrip())
 
             # prev = {; and curr = code -> same as prev
             elif (is_an_opening_line(prev_line)) and (is_a_code_line(curr_line)):
-                wsp = get_indent_whitespace(prev_indent)
-                cus = curr_line.lstrip()
-                indented_lines.append(wsp + cus)
+                indented_lines.append(get_indent_whitespace(prev_indent) + curr_line.lstrip())
 
             # prev = code; curr = } -> same as prev
             elif (is_a_code_line(prev_line)) and (is_a_closing_line(curr_line)):
-                wsp = get_indent_whitespace(prev_indent)
-                cus = curr_line.lstrip()
-                indented_lines.append(wsp + cus)
+                indented_lines.append(get_indent_whitespace(prev_indent) + curr_line.lstrip())
 
             # prev = code; curr = { -> +1 level
             elif (is_a_code_line(prev_line)) and (is_an_opening_line(curr_line)):
-                wsp = get_indent_whitespace(prev_indent + 4)
-                cus = curr_line.lstrip()
-                indented_lines.append(wsp + cus)
+                indented_lines.append(get_indent_whitespace(prev_indent + indent_spaces_length) + curr_line.lstrip())
 
             # prev = }; curr = code -> -1 level
             elif (is_a_closing_line(prev_line) and is_a_code_line(curr_line)):
-                wsp = get_indent_whitespace(prev_indent - 4)
-                cus = curr_line.lstrip()
-                indented_lines.append(wsp + cus)
+                indented_lines.append(get_indent_whitespace(prev_indent - indent_spaces_length) + curr_line.lstrip())
+
+            # prev = }; curr = } -> -1 level
+            elif (is_a_closing_line(prev_line) and is_a_closing_line(curr_line)):
+                indented_lines.append(get_indent_whitespace(prev_indent - indent_spaces_length) + curr_line.lstrip())
+
+            # prev = {; curr = { -> +1 level
+            elif (is_an_opening_line(prev_line) and is_an_opening_line(curr_line)):
+                indented_lines.append(get_indent_whitespace(prev_indent + indent_spaces_length) + curr_line.lstrip())
 
             else:
                 indented_lines.append(curr_line)
 
     return "\n".join(indented_lines)
+
 
 
 def get_indent_level(line: str) -> int:
@@ -174,13 +171,12 @@ def get_indent_level(line: str) -> int:
             elif i == "\t":
                 count += 4
 
-    if count == 1: # due to how the loop works with special characters
+    if count == 1:
         return 0
     if count % 4 == 0:
         return count
     else:
-        return get_nearest_multiple_of(count, 4)
-
+        return get_nearest_multiple_of(count, get_indent_spaces_length())
 
 def get_nearest_multiple_of(x: int, of: int) -> int:
     return ((x + (of - 1)) & (-of))

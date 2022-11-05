@@ -8,5 +8,7 @@
             "LICENSE",
             "tests.py",
             "whitesmiths_linter_settings.json"
-        ]
+        ],
+    "indent_space_length": 4,
+    "modify_source" : false
 }
