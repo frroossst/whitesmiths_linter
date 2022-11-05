@@ -1,0 +1,14 @@
+{
+      "skip": [
+            "linter.py",
+            "README.md",
+            ".gitignore",
+            "TODO",
+            "LICENSE",
+            "tests.py",
+            "whitesmiths_linter_settings.json",
+            "test.json"
+      ],
+      "indent_space_length": 4,
+      "modify_source": false
+}

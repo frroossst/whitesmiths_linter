@@ -1,8 +1,6 @@
-- filter bad bracket spacing and negative indents
+- fix json parsing error
 
-- linter_settings.json
-
-- match indented funcs
+- add regex support for file skipping patterns
 
 - restrict each function to 40 lines
 

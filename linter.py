@@ -11,9 +11,12 @@ def get_all_files() -> list:
     return os.listdir(os.getcwd())
 
 def get_files_to_skip() -> list:
-    with open("whitesmiths_linter_settings.json", "r") as fobj:
-        settings = json.load(fobj)
-        return settings["skip"]
+    try:
+        with open("whitesmiths_linter_settings.json", "r") as fobj:
+            settings = json.load(fobj)
+            return settings["skip"]
+    except FileNotFoundError:
+        generate_default_linter_settings()
 
 def get_source_overwrite_permission() -> bool:
     with open("whitesmiths_linter_settings.json", "r") as fobj:
@@ -24,6 +27,20 @@ def get_indent_spaces_length() -> int:
     with open("whitesmiths_linter_settings.json", "r") as fobj:
         settings = json.load(fobj)
         return int(settings["indent_space_length"])
+
+def generate_default_linter_settings() -> None:
+    default_settings = {"skip" : [
+            "linter.py",
+            "README.md",
+            ".gitignore",
+            "TODO",
+            "LICENSE",
+            "tests.py",
+            "whitesmiths_linter_settings.json"],
+    "indent_space_length": 4, "modify_source" : False}
+
+    with open("whitesmiths_linter_settings.json", "w") as fobj:
+        json.dump(default_settings,fobj, indent=6)
 
 
 
@@ -70,7 +87,6 @@ def manage_brackets(tokens: str) -> str:
             if curr["char"] == open_brace:
                 look_back = -1
                 while True:
-                    a = bracket_aligned[look_back]
                     if (bracket_aligned[look_back].isalnum()) and not ("\n" in bracket_aligned[look_back]) :
                         if bracket_aligned[look_back].isspace():
                             pass
@@ -200,4 +216,4 @@ def is_a_closing_line(line):
 
 
 if __name__ == "__main__":
-    main()
+        main()
