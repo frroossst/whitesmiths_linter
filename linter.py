@@ -214,4 +214,5 @@ def is_a_closing_line(line):
     return line.strip() == close_brace
 
 
-
+if __name__ == "__main__":
+    main()
