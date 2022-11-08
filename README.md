@@ -46,7 +46,5 @@ else if (!JS_DefineProperty(cx, o, "data", OBJECT_TO_JSVAL(NULL), NULL, NULL, JS
 
 
 
-And that is the life of a programmer, come across something, pick that has a hill to die on, write tools to automate said task, and of course convert everyone else to your way of programming.
-
-NOTE : Not the best, quick and dirty, gets the job done decently well, I still have to go through the codebase to fix things here and there but saves me time and that's that  
+And that is the life of a programmer, come across something, pick that has a hill to die on, write tools to automate said task, and of course convert 
 
