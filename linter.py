@@ -37,7 +37,7 @@ def generate_default_linter_settings() -> None:
             "LICENSE",
             "tests.py",
             "whitesmiths_linter_settings.json"],
-    "indent_space_length": 4, "modify_source" : False}
+    "indent_space_length": 4, "modify_source" : False, "useTabs" : True}
 
     with open("whitesmiths_linter_settings.json", "w") as fobj:
         json.dump(default_settings,fobj, indent=6)
@@ -45,17 +45,35 @@ def generate_default_linter_settings() -> None:
 
 
 def main() -> None:
+
     files = get_all_files()
     except_src = get_files_to_skip()
+
+    linted_files = 0
+    error_files = 0
+    skipped_files = 0
+    total_files = len(files)
+
     for i in files:
         if i not in except_src:
             try:
                 lint(i)
                 print(f"[LINTED] {i}")
+                linted_files += 1
             except IsADirectoryError:
                 print(f"[SKIPPED] {i} is a directory")
+                skipped_files += 1
+            except Exception as e:
+                print(f"[ERROR] {e}")
+                error_files += 1
         else:
             print(f"[SKIPPED] {i} found in exception list")
+            skipped_files += 1
+
+    print(f"error   : {error_files}/{total_files} ")
+    print(f"linted  : {linted_files}/{total_files} ")
+    print(f"skipped : {skipped_files}/{total_files} ")
+
 
 def lint(fileName: str) -> None:
     with open(fileName, "r") as fobj:

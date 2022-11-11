@@ -1,0 +1,14 @@
+if (data != NULL && res > 0) 
+    {
+    if (!JS_DefineProperty(cx, o, "data", STRING_TO_JSVAL(JS_NewStringCopyN(cx, data, res)), NULL, NULL, JSPROP_ENUMERATE)) 
+        {
+        QUEUE_EXCEPTION("Internal error!");
+        goto err;
+        }
+    PQfreemem(data);
+    }
+else if (!JS_DefineProperty(cx, o, "data", OBJECT_TO_JSVAL(NULL), NULL, NULL, JSPROP_ENUMERATE)) 
+    {
+    QUEUE_EXCEPTION("Internal error!");
+    goto err;
+    }
