@@ -1,9 +1,0 @@
-int main() 
-    {
-    if (true) 
-        {
-        print()			
-        }
-    return 0; 			
-    }
-

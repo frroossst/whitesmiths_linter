@@ -64,7 +64,7 @@ def main() -> None:
                 print(f"[SKIPPED] {i} is a directory")
                 skipped_files += 1
             except Exception as e:
-                print(f"[ERROR] {e}")
+                print(f"[ERROR] {i}:  {e}")
                 error_files += 1
         else:
             print(f"[SKIPPED] {i} found in exception list")
@@ -102,7 +102,7 @@ def manage_brackets(tokens: str) -> str:
     for idx, i in enumerate(tokens):
         for sub_idx, j in enumerate(i):
             curr = {"line num": idx, "char num": sub_idx, "char": j} # numbers are offset by 1
-            if curr["char"] == open_brace:
+            if (curr["char"] == open_brace) and (idx != 0):
                 look_back = -1
                 while True:
                     if (bracket_aligned[look_back].isalnum()) and not ("\n" in bracket_aligned[look_back]) :
