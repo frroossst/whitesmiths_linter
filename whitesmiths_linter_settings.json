@@ -10,6 +10,6 @@
             "whitesmiths_linter_settings.json"
         ],
     "indent_space_length": 4,
-    "modify_source" : false,
+    "modify_source" : true,
     "useTabs" : true
 }
