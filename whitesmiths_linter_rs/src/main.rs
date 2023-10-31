@@ -25,10 +25,10 @@ fn main() {
     let mut buffer = String::new();
     fobj.read_to_string(&mut buffer).unwrap();
 
-    let lxr = Lexer::new(buffer.as_str());
+    let mut lxr = Lexer::new(buffer.as_str());
 
     for i in lxr {
-        println!("{}", i);
+        println!("{:?}", i);
     }
 
 }
